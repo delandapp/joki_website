@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-import LaunchUI from "../../logos/launch-ui";
+import LaunchUI from "../../logos/joki-lab-ui";
 import {
   MotionInView,
   fadeLeft,
@@ -98,7 +98,9 @@ export default function FooterSection({
                   variants={index % 2 === 0 ? fadeRight : fadeLeft}
                 >
                   <FooterColumn>
-                    <h3 className="text-md pt-1 font-semibold">{column.title}</h3>
+                    <h3 className="text-md pt-1 font-semibold">
+                      {column.title}
+                    </h3>
                     {column.links.map((link, linkIndex) => (
                       <a
                         key={linkIndex}

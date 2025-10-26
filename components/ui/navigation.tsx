@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-import LaunchUI from "../logos/launch-ui";
+import JokiLabUI from "../logos/joki-lab-ui";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -98,8 +98,8 @@ export default function Navigation({
         "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
     },
   ],
-  logo = <LaunchUI />,
-  logoTitle = "Launch UI",
+  logo = <JokiLabUI />,
+  logoTitle = "Joki Lab",
   logoDescription = "Landing page template built with React, Shadcn/ui and Tailwind that you can copy/paste into your project.",
   logoHref = siteConfig.url,
   introItems = [
@@ -135,7 +135,9 @@ export default function Navigation({
               </NavigationMenuLink>
             ) : (
               <>
-                <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent">
+                  {item.title}
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   {item.content === "default" ? (
                     <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
