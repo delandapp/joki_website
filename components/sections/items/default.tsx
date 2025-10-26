@@ -84,7 +84,7 @@ export default function Items({
   className,
 }: ItemsProps) {
   return (
-    <Section id="produk" className={className}>
+    <Section id="layanan" className={className}>
       <MotionInView
         variants={staggerContainer}
         className="max-w-container mx-auto flex flex-col items-center gap-6 sm:gap-20"

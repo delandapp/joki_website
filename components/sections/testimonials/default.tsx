@@ -218,7 +218,7 @@ export default function Testimonials({
   const columns = items && items.length > 0 ? Math.ceil(items.length / 3) : 0;
 
   return (
-    <Section id="testimonials" className={className}>
+    <Section id="testimoni" className={className}>
       <MotionInView
         variants={fadeUp}
         className="max-w-container relative mx-auto"

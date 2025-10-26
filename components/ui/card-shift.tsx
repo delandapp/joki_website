@@ -36,7 +36,7 @@ const ShiftCardContent = React.forwardRef<
     initial: { opacity: 0, height: 0 },
     animate: isHovered
       ? { opacity: 1, height: 210 }
-      : { opacity: 1, height: 38 },
+      : { opacity: 1, height: 50 },
     transition: { duration: 0.3, delay: 0.1, ease: "circIn" },
   };
 
@@ -132,7 +132,7 @@ const ShiftCard = React.forwardRef<HTMLDivElement, ShiftCardProps>(
 
         <ShiftCardContent
           isHovered={isHovered}
-          className="absolute right-0 bottom-0 left-0 flex flex-col gap-4 rounded-xl"
+          className="absolute right-0 bottom-0 left-0 mt-2 flex flex-col gap-4"
         >
           <motion.div className="flex w-full flex-col gap-1">
             {bottomContent}

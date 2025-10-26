@@ -338,7 +338,7 @@ export function ProjectDetailTemplate({
           )}
 
           {actions.length > 0 && (
-            <div className="mx-auto flex flex-wrap justify-center gap-3">
+            <div className="mx-auto flex justify-center gap-3">
               {actions.map((action) => (
                 <TextureButton
                   key={action.label}
@@ -350,7 +350,7 @@ export function ProjectDetailTemplate({
                     href={action.href}
                     target={action.newTab ? "_blank" : undefined}
                     rel={action.newTab ? "noopener noreferrer" : undefined}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 whitespace-nowrap"
                   >
                     {action.icon}
                     {action.label}
@@ -363,7 +363,7 @@ export function ProjectDetailTemplate({
       </Section>
 
       <Section className="bg-background">
-        <div className="grid w-full auto-rows-[minmax(220px,_1fr)] gap-4 sm:gap-6 md:grid-cols-4">
+        <div className="grid w-full gap-4 sm:gap-6 md:grid-cols-4">
           <div className="md:col-span-2 md:row-span-3">
             <ContentDetail detail={detailConfig} />
           </div>

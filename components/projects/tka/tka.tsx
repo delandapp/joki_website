@@ -15,7 +15,7 @@ const TKA_PROJECT_CARD: CardShiftProjectProps = {
   description:
     "Platform terpadu untuk memonitor tugas akhir, jadwal pembimbingan, dan arsip dokumen akademik secara real-time. Dashboard dirancang agar tim kampus dan mahasiswa dapat berkolaborasi tanpa hambatan.",
   image: {
-    src: "/assets/images/projects/coming-soon.svg",
+    src: "/assets/images/projects/tka/poster.svg",
     alt: "Pratinjau dashboard Tata Kelola Akademik",
   },
   icons: [

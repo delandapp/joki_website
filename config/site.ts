@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Joki Project & Website",
-  url: "https://your-domain.com",
+  url: "http://localhost:3000",
   getStartedUrl: "#kontak",
   ogImage: "https://your-domain.com/og.jpg",
   description:

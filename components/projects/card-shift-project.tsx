@@ -87,13 +87,13 @@ export function CardShiftProject({
         src={image.src}
         layoutId={`project-${title}-image`}
         width={90}
-        height={64}
+        height={60}
         alt={image.alt ?? title}
-        className="border-border/70 absolute top-3 right-3 h-[70px] rounded-md border object-cover shadow-md"
+        className="border-border/70 absolute top-3.5 right-3.5 h-[68px] rounded-md border object-cover shadow-md"
       />
 
       <motion.div
-        className="border-border/70 dark:border-border/40 absolute top-2.5 right-2.5 h-[76px] w-[96px] rounded-md border border-dashed"
+        className="border-border/70 dark:border-border/40 absolute top-2.5 right-2.5 h-[76px] w-[98px] rounded-md border border-dashed"
         initial={{ opacity: 0, scale: 1.2, y: 10, filter: "blur(6px)" }}
         animate={{
           opacity: 1,
@@ -116,10 +116,9 @@ export function CardShiftProject({
     <motion.img
       src={image.src}
       layoutId={`project-${title}-image`}
-      width={180}
-      height={220}
+      width={330}
       alt={image.alt ?? title}
-      className="bg-muted border-border/60 rounded-xl border object-cover shadow-lg"
+      className="bg-muted border-border/60 rounded-xl border object-contain shadow-lg"
     />
   );
 
