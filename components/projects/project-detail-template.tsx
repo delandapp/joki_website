@@ -20,6 +20,17 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import CardSwap, { Card } from "../ui/card-swap";
+import {
+  MotionInView,
+  fadeUp,
+  fadeLeft,
+  fadeRight,
+  blurIn,
+  scaleIn,
+  staggerContainer,
+  titleReveal,
+  descriptionReveal,
+} from "../ui/in-view";
 
 type ProjectAction = {
   label: string;
@@ -91,6 +102,10 @@ type GalleryCardConfig = {
   title: string;
   description: string;
   icon?: React.ReactNode;
+  image?: {
+    src: string;
+    alt: string;
+  };
 };
 
 type GalleryShowcaseConfig = {
@@ -305,40 +320,54 @@ export function ProjectDetailTemplate({
   return (
     <div className={cn("w-full space-y-16", className)}>
       <Section className="bg-background">
-        <div className="mx-auto flex max-w-5xl flex-col gap-8 text-center">
+        <MotionInView
+          variants={staggerContainer}
+          className="mx-auto flex max-w-5xl flex-col gap-8 text-center"
+        >
           <div className="mx-auto flex flex-col gap-4">
             {subtitle && (
-              <span className="bg-brand/10 text-brand w-fit rounded-full px-4 py-1 text-xs font-semibold tracking-wide uppercase">
-                {subtitle}
-              </span>
+              <MotionInView variants={fadeUp}>
+                <span className="bg-brand/10 text-brand w-fit rounded-full px-4 py-1 text-xs font-semibold tracking-wide uppercase">
+                  {subtitle}
+                </span>
+              </MotionInView>
             )}
-            <h1 className="text-4xl font-semibold text-balance sm:text-5xl md:text-6xl">
-              {title}
-            </h1>
-            <p className="text-muted-foreground mx-auto max-w-2xl text-lg leading-relaxed">
-              {description}
-            </p>
+            <MotionInView variants={titleReveal}>
+              <h1 className="text-4xl font-semibold text-balance sm:text-5xl md:text-6xl">
+                {title}
+              </h1>
+            </MotionInView>
+            <MotionInView variants={descriptionReveal}>
+              <p className="text-muted-foreground mx-auto max-w-2xl text-lg leading-relaxed">
+                {description}
+              </p>
+            </MotionInView>
           </div>
 
           {stats.length > 0 && (
-            <StatsCards
-              title={statsTitle ?? "Snapshot Proyek"}
-              description={
-                statsDescription ??
-                "Gambaran cepat tentang capaian, cakupan, dan nilai utama proyek ini."
-              }
-              stats={stats.map((stat) => ({
-                value: stat.value,
-                label: stat.label,
-                description: stat.description ?? stat.helper,
-                icon: stat.icon,
-                trend: stat.trend,
-              }))}
-            />
+            <MotionInView variants={scaleIn}>
+              <StatsCards
+                title={statsTitle ?? "Snapshot Proyek"}
+                description={
+                  statsDescription ??
+                  "Gambaran cepat tentang capaian, cakupan, dan nilai utama proyek ini."
+                }
+                stats={stats.map((stat) => ({
+                  value: stat.value,
+                  label: stat.label,
+                  description: stat.description ?? stat.helper,
+                  icon: stat.icon,
+                  trend: stat.trend,
+                }))}
+              />
+            </MotionInView>
           )}
 
           {actions.length > 0 && (
-            <div className="mx-auto flex justify-center gap-3">
+            <MotionInView
+              variants={fadeUp}
+              className="mx-auto flex justify-center gap-3"
+            >
               {actions.map((action) => (
                 <TextureButton
                   key={action.label}
@@ -357,20 +386,32 @@ export function ProjectDetailTemplate({
                   </a>
                 </TextureButton>
               ))}
-            </div>
+            </MotionInView>
           )}
-        </div>
+        </MotionInView>
       </Section>
 
       <Section className="bg-background">
-        <div className="grid w-full gap-4 sm:gap-6 md:grid-cols-4">
-          <div className="md:col-span-2 md:row-span-3">
+        <MotionInView
+          variants={staggerContainer}
+          className="mx-auto grid w-full gap-4 sm:gap-6 md:max-w-7xl md:grid-cols-4"
+        >
+          <MotionInView
+            variants={fadeRight}
+            className="md:col-span-2 md:row-span-3"
+          >
             <ContentDetail detail={detailConfig} />
-          </div>
-          <div className="md:col-span-2 md:col-start-3 md:row-span-3">
+          </MotionInView>
+          <MotionInView
+            variants={fadeLeft}
+            className="md:col-span-2 md:col-start-3 md:row-span-3"
+          >
             <ContentGallery showcase={galleryShowcaseConfig} />
-          </div>
-          <div className="md:col-span-4 md:row-span-4">
+          </MotionInView>
+          <MotionInView
+            variants={blurIn}
+            className="md:col-span-4 md:row-span-4"
+          >
             <div className="border-border/60 bg-card overflow-hidden rounded-3xl border">
               <IntegrationsSection
                 title={integrationsTitle ?? "Teknologi yang Dipakai"}
@@ -380,14 +421,17 @@ export function ProjectDetailTemplate({
                 highlight={integrationsHighlight}
               />
             </div>
-          </div>
-        </div>
+          </MotionInView>
+        </MotionInView>
       </Section>
 
       {timelineEntries.length > 0 && (
         <Section className="bg-background">
-          <div className="mx-auto max-w-6xl">
-            <div className="border-border/60 bg-card rounded-3xl border shadow-lg">
+          <MotionInView variants={fadeUp} className="mx-auto md:max-w-7xl">
+            <MotionInView
+              variants={scaleIn}
+              className="border-border/60 bg-card rounded-3xl border shadow-lg"
+            >
               <Timeline
                 data={timelineEntries}
                 title={timelineTitle ?? "Timeline Pengembangan"}
@@ -397,49 +441,57 @@ export function ProjectDetailTemplate({
                 }
                 className="bg-card rounded-3xl"
               />
-            </div>
-          </div>
+            </MotionInView>
+          </MotionInView>
         </Section>
       )}
 
       {gallery.length > 0 && (
         <Section className="bg-background">
-          <div className="mx-auto max-w-6xl space-y-6">
+          <MotionInView
+            variants={staggerContainer}
+            className="mx-auto space-y-6 md:max-w-7xl"
+          >
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-semibold">Galeri Proyek</h2>
-                <p className="text-muted-foreground text-sm">
-                  Cuplikan layar dan mockup yang menampilkan detail antarmuka
-                  dan alur kerja.
-                </p>
+                <MotionInView variants={titleReveal}>
+                  <h2 className="text-2xl font-semibold">Galeri Proyek</h2>
+                </MotionInView>
+                <MotionInView variants={descriptionReveal}>
+                  <p className="text-muted-foreground text-sm">
+                    Cuplikan layar dan mockup yang menampilkan detail antarmuka
+                    dan alur kerja.
+                  </p>
+                </MotionInView>
               </div>
               <Sparkles className="text-brand hidden h-6 w-6 sm:block" />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {gallery.map((item, index) => (
-                <figure
-                  key={item.src + index}
-                  className={cn(
-                    "bg-card group border-border/50 relative overflow-hidden rounded-2xl border shadow-md",
-                    item.span === "row" && "sm:row-span-2",
-                    item.span === "col" && "lg:col-span-2",
-                  )}
-                >
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.02]"
-                  />
-                  {item.caption && (
-                    <figcaption className="bg-background/80 text-foreground absolute inset-x-0 bottom-0 px-4 py-3 text-sm backdrop-blur">
-                      {item.caption}
-                    </figcaption>
-                  )}
-                </figure>
+                <MotionInView key={item.src + index} variants={fadeUp}>
+                  <figure
+                    className={cn(
+                      "bg-card group border-border/50 relative overflow-hidden rounded-2xl border shadow-md",
+                      item.span === "row" && "sm:row-span-2",
+                      item.span === "col" && "lg:col-span-2",
+                    )}
+                  >
+                    <img
+                      src={item.src}
+                      alt={item.alt}
+                      className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.02]"
+                    />
+                    {item.caption && (
+                      <figcaption className="bg-background/80 text-foreground absolute inset-x-0 bottom-0 px-4 py-3 text-sm backdrop-blur">
+                        {item.caption}
+                      </figcaption>
+                    )}
+                  </figure>
+                </MotionInView>
               ))}
             </div>
-          </div>
+          </MotionInView>
         </Section>
       )}
     </div>
@@ -474,33 +526,45 @@ function IntegrationsSection({
   return (
     <section>
       <div className="bg-muted dark:bg-background py-24 md:py-32">
-        <div className="mx-auto flex flex-col px-6 md:grid md:max-w-5xl md:grid-cols-2 md:gap-12">
+        <MotionInView
+          variants={staggerContainer}
+          className="mx-auto flex flex-col px-6 md:grid md:max-w-7xl md:grid-cols-2 md:gap-12"
+        >
           <div className="order-last mt-6 flex flex-col gap-12 md:order-first">
             <div className="space-y-6">
-              <h2 className="text-3xl font-semibold text-balance md:text-4xl lg:text-5xl">
-                {title}
-              </h2>
+              <MotionInView variants={titleReveal}>
+                <h2 className="text-3xl font-semibold text-balance md:text-4xl lg:text-5xl">
+                  {title}
+                </h2>
+              </MotionInView>
               {description && (
-                <p className="text-muted-foreground">{description}</p>
+                <MotionInView variants={descriptionReveal}>
+                  <p className="text-muted-foreground">{description}</p>
+                </MotionInView>
               )}
               {cta && (
-                <Button variant="outline" size="sm" asChild>
-                  <Link
-                    href={cta.href}
-                    target={cta.newTab ? "_blank" : undefined}
-                    rel={cta.newTab ? "noopener noreferrer" : undefined}
-                  >
-                    <span className="flex items-center gap-2">
-                      {cta.icon}
-                      {cta.label}
-                    </span>
-                  </Link>
-                </Button>
+                <MotionInView variants={fadeUp}>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link
+                      href={cta.href}
+                      target={cta.newTab ? "_blank" : undefined}
+                      rel={cta.newTab ? "noopener noreferrer" : undefined}
+                    >
+                      <span className="flex items-center gap-2">
+                        {cta.icon}
+                        {cta.label}
+                      </span>
+                    </Link>
+                  </Button>
+                </MotionInView>
               )}
             </div>
 
             {highlight && (
-              <div className="mt-auto grid grid-cols-[auto_1fr] gap-3">
+              <MotionInView
+                variants={blurIn}
+                className="mt-auto grid grid-cols-[auto_1fr] gap-3"
+              >
                 <div className="flex aspect-square items-center justify-center border">
                   {highlight.icon ?? <Sparkles className="text-brand size-9" />}
                 </div>
@@ -513,25 +577,32 @@ function IntegrationsSection({
                     )}
                   </div>
                 </blockquote>
-              </div>
+              </MotionInView>
             )}
           </div>
 
           <div className="-mx-6 [mask-image:radial-gradient(ellipse_100%_100%_at_50%_0%,#000_70%,transparent_100%)] px-6 sm:mx-auto sm:max-w-md md:-mx-6 md:mr-0 md:ml-auto">
             <div className="bg-background dark:bg-muted/50 rounded-2xl border p-3 shadow-lg md:pb-12">
-              <div className="grid grid-cols-2 gap-2">
+              <MotionInView
+                variants={staggerContainer}
+                className="grid grid-cols-2 gap-2"
+              >
                 {integrations.map((integration, index) => (
-                  <Integration
+                  <MotionInView
+                    variants={fadeUp}
                     key={`${integration.name}-${index}`}
-                    icon={integration.icon}
-                    name={integration.name}
-                    description={integration.category ?? ""}
-                  />
+                  >
+                    <Integration
+                      icon={integration.icon}
+                      name={integration.name}
+                      description={integration.category ?? ""}
+                    />
+                  </MotionInView>
                 ))}
-              </div>
+              </MotionInView>
             </div>
           </div>
-        </div>
+        </MotionInView>
       </div>
     </section>
   );
@@ -575,25 +646,35 @@ function ContentDetail({ detail }: { detail: DetailSectionConfig }) {
   return (
     <div className="border-border/60 bg-card flex h-full flex-col gap-6 rounded-3xl border p-6 sm:p-8">
       <div className="space-y-3">
-        <h2 className="text-foreground text-2xl font-semibold sm:text-3xl">
-          {title}
-        </h2>
+        <MotionInView variants={titleReveal}>
+          <h2 className="text-foreground text-2xl font-semibold sm:text-3xl">
+            {title}
+          </h2>
+        </MotionInView>
         {description && (
-          <p className="text-muted-foreground text-sm sm:text-base">
-            {description}
-          </p>
+          <MotionInView variants={descriptionReveal}>
+            <p className="text-muted-foreground text-sm sm:text-base">
+              {description}
+            </p>
+          </MotionInView>
         )}
         {secondaryDescription && (
-          <p className="text-muted-foreground text-xs sm:text-sm">
-            {secondaryDescription}
-          </p>
+          <MotionInView variants={fadeUp}>
+            <p className="text-muted-foreground text-xs sm:text-sm">
+              {secondaryDescription}
+            </p>
+          </MotionInView>
         )}
       </div>
 
       {highlights.length > 0 && (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <MotionInView
+          variants={staggerContainer}
+          className="grid gap-3 sm:grid-cols-2"
+        >
           {highlights.map((item, index) => (
-            <div
+            <MotionInView
+              variants={fadeUp}
               key={`${item.title}-${index}`}
               className="border-border/40 bg-background/60 flex flex-col gap-2 rounded-2xl border p-3 sm:p-4"
             >
@@ -606,13 +687,16 @@ function ContentDetail({ detail }: { detail: DetailSectionConfig }) {
               <p className="text-muted-foreground text-xs sm:text-sm">
                 {item.description}
               </p>
-            </div>
+            </MotionInView>
           ))}
-        </div>
+        </MotionInView>
       )}
 
       {image && (
-        <div className="border-border/40 relative mt-auto w-full overflow-hidden rounded-2xl border">
+        <MotionInView
+          variants={scaleIn}
+          className="border-border/40 relative mt-auto w-full overflow-hidden rounded-2xl border"
+        >
           {image.dark && (
             <Image
               src={image.dark}
@@ -636,7 +720,7 @@ function ContentDetail({ detail }: { detail: DetailSectionConfig }) {
             width={1207}
             height={929}
           />
-        </div>
+        </MotionInView>
       )}
     </div>
   );
@@ -648,20 +732,27 @@ function ContentGallery({ showcase }: { showcase: GalleryShowcaseConfig }) {
   const height = cardSize?.height ?? 420;
 
   return (
-    <div className="border-border/60 bg-card relative flex h-full flex-col rounded-3xl border p-6 sm:p-8">
+    <div className="border-border/60 bg-card relative flex min-h-[600px] flex-col overflow-hidden rounded-3xl border p-6 sm:p-8 md:h-full">
       <div className="space-y-2">
-        <h2 className="text-foreground text-2xl font-semibold sm:text-3xl">
-          {title}
-        </h2>
+        <MotionInView variants={titleReveal}>
+          <h2 className="text-foreground text-2xl font-semibold sm:text-3xl">
+            {title}
+          </h2>
+        </MotionInView>
         {description && (
-          <p className="text-muted-foreground text-sm sm:text-base">
-            {description}
-          </p>
+          <MotionInView variants={descriptionReveal}>
+            <p className="text-muted-foreground text-sm sm:text-base">
+              {description}
+            </p>
+          </MotionInView>
         )}
       </div>
 
       {/* area CardSwap isi sisa ruang */}
-      <div className="mt-6 min-h-0 flex-1">
+      <MotionInView
+        variants={blurIn}
+        className="relative flex min-h-full flex-1 flex-col items-end justify-center pt-26 md:pt-10"
+      >
         <CardSwap
           // CONTAINER full
           width="100%"
@@ -673,7 +764,7 @@ function ContentGallery({ showcase }: { showcase: GalleryShowcaseConfig }) {
           verticalDistance={60}
           delay={3200}
           pauseOnHover
-          containerClassName="w-full h-full"
+          containerClassName="w-full h-full "
         >
           {cards.map((card, index) => (
             <Card
@@ -684,6 +775,14 @@ function ContentGallery({ showcase }: { showcase: GalleryShowcaseConfig }) {
                 <div className="text-brand flex items-center gap-2">
                   {card.icon ?? <Sparkles className="size-5" />}
                 </div>
+                <Image
+                  src={
+                    card.image?.src ?? "/assets/images/projects/coming-soon.svg"
+                  }
+                  alt={card.image?.alt ?? "coming soon"}
+                  width={400}
+                  height={200}
+                />
                 <div className="space-y-2">
                   <h3 className="text-lg font-semibold">{card.title}</h3>
                   <p className="text-muted-foreground text-sm">
@@ -694,7 +793,7 @@ function ContentGallery({ showcase }: { showcase: GalleryShowcaseConfig }) {
             </Card>
           ))}
         </CardSwap>
-      </div>
+      </MotionInView>
     </div>
   );
 }

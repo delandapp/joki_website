@@ -53,7 +53,7 @@ const TKA_PROJECT_CARD: CardShiftProjectProps = {
     },
     {
       label: "Detail Project",
-      href: "#",
+      href: "/project/tka",
       icon: <ShieldCheck className="h-4 w-4" />,
     },
   ],

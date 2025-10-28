@@ -24,158 +24,178 @@ import Express from "@/components/icons/express-js-icon";
 import Postgresql from "@/components/icons/posgresql-icon";
 
 const TKA_DETAIL_CONFIG: ProjectDetailTemplateProps = {
-  title: "Transformasi Tata Kelola Akademik",
-  subtitle: "Case Study",
+  title: "TKA — Tryout Kelompok Aktif",
+  subtitle: "Realtime Tryout Platform",
   description:
-    "Kami merancang platform terpadu untuk memantau tugas akhir, bimbingan, dan arsip akademik secara real-time. Fokusnya: pengalaman dosen & mahasiswa yang lebih sinkron, aman, dan transparan.",
+    "Platform tryout berbasis web yang menghadirkan pengalaman ujian layaknya ruang kelas virtual. Siswa masuk ke room, pengawas memantau secara realtime, lengkap dengan pembahasan interaktif pasca-ujian.",
   detailSection: {
-    title: "Serahkan koordinasi tugas akhir ke platform yang terintegrasi",
+    title: "Ujian Online Sekelas Zoom, tapi Lebih Fokus & Terkontrol",
     description:
-      "Tim kampus memperoleh satu pusat kontrol untuk memantau proposal, konsultasi, hingga pengesahan dokumen.",
+      "Pengawas dapat membuat room ujian, memantau aktivitas peserta, hingga menutup sesi secara langsung dengan satu klik.",
     secondaryDescription:
-      "Mahasiswa, dosen pembimbing, dan admin akademik melihat status yang sama — tanpa lagi berburu file atau catatan manual.",
+      "Siswa cukup masuk ke room yang ditentukan, mengikuti tryout realtime, dan langsung mendapat pembahasan otomatis setelah selesai.",
     highlights: [
       {
-        icon: <Sparkles className="text-brand size-4" />,
-        title: "Dashboard Realtime",
+        icon: <Rocket className="text-brand size-4" />,
+        title: "Realtime Monitoring",
         description:
-          "Status setiap mahasiswa tersinkron otomatis beserta notifikasi progres berikutnya.",
+          "Setiap aktivitas siswa — mulai dari masuk room hingga submit jawaban — terpantau langsung via socket.",
       },
       {
-        icon: <ShieldCheck className="text-brand size-4" />,
-        title: "Kepatuhan & Arsip",
+        icon: <BarChart3 className="text-brand size-4" />,
+        title: "Pembahasan Otomatis",
         description:
-          "Arsip digital terenkripsi dengan log audit untuk memenuhi standar institusi.",
+          "Selesai ujian, sistem langsung menampilkan hasil dan pembahasan interaktif per soal.",
       },
     ],
     image: {
-      light: "/assets/images/projects/coming-soon.svg",
-      alt: "Tampilan dashboard Tata Kelola Akademik",
+      light: "/assets/images/projects/tka/showcase-1.png",
+      alt: "Tampilan dashboard TKA realtime tryout",
     },
   },
+
   galleryShowcase: {
-    title: "Sorotan Modul Utama",
+    title: "Sorotan Fitur Utama",
     description:
-      "Kartu-kartu fitur yang menunjukkan nilai praktis untuk tim kampus dan mahasiswa.",
+      "Fitur-fitur inti yang membuat pengalaman tryout jadi terasa nyata, terarah, dan menyenangkan.",
     cards: [
       {
+        image: {
+          src: "/assets/images/projects/tka/showcase-1.png",
+          alt: "Pratinjau room tryout TKA",
+        },
         icon: <Rocket className="text-brand size-5" />,
-        title: "Automasi Workflow",
+        title: "Room Ujian Realtime",
         description:
-          "Template tahapan tugas akhir yang otomatis mengarahkan mahasiswa dan pembimbing.",
+          "Pengawas membuat ruang ujian layaknya Zoom — siswa bergabung dan langsung diawasi realtime.",
       },
       {
+        image: {
+          src: "/assets/images/projects/tka/showcase-2.png",
+          alt: "Pratinjau pembahasan tryout TKA",
+        },
         icon: <BarChart3 className="text-brand size-5" />,
-        title: "Panel Analitik",
+        title: "Pembahasan Otomatis",
         description:
-          "Pantau beban pembimbing, tingkat revisi, dan distribusi progress per jurusan.",
+          "Begitu ujian selesai, hasil dan pembahasan muncul instan untuk tiap soal.",
       },
       {
+        image: {
+          src: "/assets/images/projects/tka/showcase-3.png",
+          alt: "Dashboard pengawas TKA",
+        },
         icon: <Timer className="text-brand size-5" />,
-        title: "Pengingat Adaptif",
+        title: "Dashboard Pengawas",
         description:
-          "Pengingat cerdas melalui email dan mobile companion demi ketepatan jadwal.",
+          "Pantau kehadiran, aktivitas, dan waktu siswa secara langsung dalam satu panel realtime.",
       },
     ],
     cardSize: { width: 460, height: 420 },
   },
+
   statsTitle: "Snapshot Proyek",
   statsDescription:
-    "Empat indikator inti yang menggambarkan ritme kerja, cakupan platform, serta komitmen keamanan dalam implementasi TKA.",
+    "Data singkat yang menggambarkan kompleksitas proyek, fokus pengembangan, dan efisiensi pengerjaan.",
   stats: [
     {
-      label: "Durasi Sprint",
-      value: "12 Minggu",
-      description: "Discovery, build, QA hingga pelatihan internal",
+      label: "Durasi Pengembangan",
+      value: "2 Minggu",
+      description: "Build fullstack dari setup hingga deployment final",
       icon: "Timer",
     },
     {
-      label: "Tim Inti",
-      value: "6 Orang",
-      description: "Product, FE, BE, QA, dan UI/UX berkolaborasi",
-      icon: "Users",
+      label: "Jumlah Developer",
+      value: "1 Orang",
+      description:
+        "Fullstack: frontend, backend, dan DevOps dikerjakan mandiri",
+      icon: "User",
     },
     {
-      label: "Platform Aktif",
-      value: "Web & Mobile",
-      description: "Dashboard admin, portal mahasiswa, companion mobile",
-      icon: "Smartphone",
+      label: "Platform",
+      value: "Web Only",
+      description: "Akses lewat browser, responsif untuk desktop & mobile",
+      icon: "Monitor",
     },
     {
-      label: "Integrasi Sistem",
-      value: "4 Sistem",
-      description: "SSO Kampus, LMS, Arsip Digital, dan Email Gateway",
+      label: "Integrasi",
+      value: "Dockerized",
+      description:
+        "Environment tersusun rapi dengan container untuk service utama",
       icon: "ShieldCheck",
     },
   ],
+
   actions: [
     {
-      label: "Minta Demo",
+      label: "Lihat Demo",
       href: "#kontak",
       icon: <ExternalLink className="size-4" />,
       variant: "accent",
       newTab: false,
     },
     {
-      label: "Download Ringkasan",
+      label: "Download Dokumentasi",
       href: "#",
       icon: <FileText className="size-4" />,
       newTab: true,
     },
   ],
-  integrationsTitle: "Integrasi & Ekosistem",
+
+  integrationsTitle: "Ekosistem & Integrasi",
   integrationsDescription:
-    "Dirancang untuk tersambung dengan ekosistem kampus: mulai dari SSO, learning management system, hingga repository dokumen resmi.",
+    "TKA dirancang agar mudah dijalankan di berbagai server melalui Docker. Backend, frontend, dan socket server terpisah dalam container independen untuk performa optimal.",
   integrationsCTA: {
-    label: "Lihat Integrasi Lengkap",
+    label: "Pelajari Setup Docker",
     href: "#",
     icon: <ExternalLink className="size-4" />,
     newTab: true,
   },
   integrationsHighlight: {
     quote:
-      "Integrasi ke sistem kampus lama berlangsung mulus dan kini proses monitoring jauh lebih transparan.",
-    author: "Kepala Divisi TI Kampus Digital",
-    role: "Stakeholder Implementasi",
-    icon: <ShieldCheck className="text-brand size-6" />,
+      "Dengan integrasi socket.io dan Docker, semua aktivitas tryout berjalan lancar tanpa delay.",
+    author: "Muhammad Deland Arjuna Putra",
+    role: "Fullstack Developer TKA",
+    icon: <Rocket className="text-brand size-6" />,
   },
-  timelineTitle: "Timeline Pengembangan",
+
+  timelineTitle: "Timeline Pengerjaan",
   timelineDescription:
-    "Tahapan prioritas yang kami lalui untuk melepas dashboard TKA ke lingkungan produksi.",
+    "Dua minggu sprint dengan fokus pada stabilitas realtime dan efisiensi deployment.",
   timeline: [
     {
-      title: "Discovery & Alignment",
+      title: "Perancangan Fitur & Arsitektur",
       description:
-        "Audit alur akademik, interview stakeholder, dan mapping kebutuhan lintas fakultas.",
-      date: "Week 1 - Week 2",
+        "Menentukan alur user, struktur database, dan arsitektur socket realtime.",
+      date: "Day 1 - Day 2",
       status: "done",
       icon: <Users className="text-brand size-3" />,
     },
     {
-      title: "Design Sprint & Prototype",
+      title: "Pembuatan UI & API",
       description:
-        "Blueprint modul dashboard, portal mahasiswa, serta prototipe interaktif untuk usability testing cepat.",
-      date: "Week 3 - Week 5",
+        "Build frontend dengan Next.js dan backend Express + Socket.io.",
+      date: "Day 3 - Day 7",
       status: "done",
       icon: <Sparkles className="text-brand size-3" />,
     },
     {
-      title: "Implementasi Bertahap",
+      title: "Integrasi Realtime & Testing",
       description:
-        "Pengembangan modul workflow, integrasi SSO kampus, sistem notifikasi, dan automasi arsip.",
-      date: "Week 6 - Week 10",
+        "Menghubungkan socket, memastikan komunikasi antar room stabil.",
+      date: "Day 8 - Day 11",
       status: "in-progress",
       icon: <Timer className="text-brand size-3" />,
     },
     {
-      title: "QA, UAT, & Launch Support",
+      title: "Dockerization & Launch",
       description:
-        "Stress-test multi-role, dokumentasi internal, onboarding tim kampus, dan support peluncuran.",
-      date: "Week 11 - Week 12",
+        "Menyusun environment Docker dan melakukan deployment final.",
+      date: "Day 12 - Day 14",
       status: "up-next",
       icon: <Rocket className="text-brand size-3" />,
     },
   ],
+
   techStack: [
     { name: "Next.js 15", category: "Frontend", icon: <NextJs size="16" /> },
     {
@@ -189,71 +209,79 @@ const TKA_DETAIL_CONFIG: ProjectDetailTemplateProps = {
       category: "Animation",
       icon: <FramermotionWordmark size="16" />,
     },
-    { name: "Express Js", category: "Backend", icon: <Express size="16" /> },
+    { name: "Express.js", category: "Backend", icon: <Express size="16" /> },
+    { name: "Socket.io", category: "Realtime", icon: <Rocket size="16" /> },
     {
       name: "PostgreSQL",
       category: "Database",
       icon: <Postgresql size="16" />,
     },
+    { name: "Docker", category: "Deployment", icon: <ShieldCheck size="16" /> },
   ],
+
   insights: [
     {
-      title: "Masalah Inti",
+      title: "Masalah Awal",
       bullets: [
-        "Data progres mahasiswa tersebar di spreadsheet pribadi, sulit dilacak lintas pembimbing.",
-        "Admin akademik menghabiskan waktu 3-4 jam per hari untuk rekap manual status tugas akhir.",
+        "Tryout online sering terkendala karena delay dan minim kontrol pengawas.",
+        "Sistem lama tidak mendukung komunikasi realtime antar siswa dan pengawas.",
       ],
     },
     {
-      title: "Target Bisnis",
+      title: "Tujuan Utama",
       bullets: [
-        "Mengurangi beban administrasi hingga 40% dalam semester pertama.",
-        "Menumbuhkan kepuasan mahasiswa dan dosen dengan status bimbingan yang transparan.",
+        "Menciptakan ruang ujian virtual interaktif dengan pengawasan realtime.",
+        "Memberi siswa pengalaman belajar & evaluasi yang transparan dan cepat.",
       ],
     },
   ],
+
   challenges: [
     {
-      title: "Constraint Teknis",
+      title: "Kendala Teknis",
       bullets: [
-        "Integrasi dengan sistem legacy kampus tanpa dokumentasi API yang lengkap.",
-        "Mendukung akses mahasiswa di daerah dengan koneksi internet terbatas.",
+        "Menjaga stabilitas socket di banyak room dengan pengguna aktif bersamaan.",
+        "Optimasi performa agar ringan di jaringan sekolah yang terbatas.",
       ],
     },
     {
-      title: "Solusi",
+      title: "Solusi Implementasi",
       bullets: [
-        "Membangun middleware GraphQL agar sinkronisasi data bisa incremental dan terjaga konsistensinya.",
-        "Menambahkan mode offline-ready untuk catatan konsultasi via aplikasi mobile companion.",
+        "Menggunakan event-driven architecture di socket server.",
+        "Men-deploy semua service lewat Docker untuk environment yang konsisten.",
       ],
     },
   ],
+
   results: [
     {
-      title: "Dampak",
+      title: "Hasil & Dampak",
       bullets: [
-        "87% mahasiswa submit revisi tepat waktu berkat notifikasi otomatis dan checklist digital.",
-        "Tim akademik dapat memonitor beban dosen pembimbing dan redistribusi tugas secara cepat.",
+        "Tryout berlangsung stabil hingga 100+ peserta aktif tanpa lag.",
+        "Waktu evaluasi turun 80% berkat pembahasan otomatis pasca-ujian.",
       ],
     },
   ],
+
   gallery: [
     {
-      src: "/assets/images/projects/coming-soon.svg",
-      alt: "Dashboard monitoring tugas akhir",
+      src: "/assets/images/projects/tka/showcase-1.png",
+      alt: "Room tryout realtime",
       caption:
-        "Dashboard ringkas menampilkan status bimbingan dan notifikasi otomatis.",
+        "Antarmuka room tryout dengan daftar peserta dan waktu berjalan realtime.",
       span: "col",
     },
     {
-      src: "/assets/images/projects/coming-soon.svg",
-      alt: "Portal mahasiswa",
-      caption: "Portal mahasiswa dengan timeline tugas akhir dan arsip revisi.",
+      src: "/assets/images/projects/tka/showcase-2.png",
+      alt: "Hasil & pembahasan tryout",
+      caption:
+        "Pembahasan otomatis muncul langsung setelah siswa menyelesaikan ujian.",
     },
     {
-      src: "/assets/images/projects/coming-soon.svg",
-      alt: "Panel analitik akademik",
-      caption: "Analitik performa tiap jurusan untuk rapat evaluasi berkala.",
+      src: "/assets/images/projects/tka/showcase-3.png",
+      alt: "Dashboard pengawas",
+      caption:
+        "Dashboard pengawas untuk memantau seluruh aktivitas peserta secara live.",
     },
   ],
 };

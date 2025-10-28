@@ -53,7 +53,7 @@ const STEMDU_PROJECT_CARD: CardShiftProjectProps = {
     },
     {
       label: "Detail Project",
-      href: "#",
+      href: "/project/video-riset",
       icon: <ShieldCheck className="h-4 w-4" />,
     },
   ],

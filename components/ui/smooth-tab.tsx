@@ -18,11 +18,15 @@ export interface SmoothTabProps {
 }
 
 /**
- * SmoothTab (reusable)
- * - Hanya bar navigasi tab (tidak render konten).
- * - Indicator aktif menggunakan Framer Motion layoutId -> posisi & lebar konsisten,
- *   tidak perlu hitung manual, sehingga hover/active tidak mempengaruhi lebar.
- * - Desain: 1 baris, kolom sama rata (menggunakan grid cols = items.length).
+ * SmoothTab
+ *
+ * Struktur:
+ * - Wrapper luar: full-width, overflow-x-auto, sembunyi scrollbar
+ * - Rail dalam: shrink-to-content (inline-flex), ada border & radius
+ *
+ * Kenapa begini?
+ * - Rail nggak dipaksa w-full, jadi border cuma sepanjang tab terakhir
+ * - Tapi kalau tab lebih panjang dari layar, wrapper luar bisa scroll ke kanan
  */
 export default function SmoothTab({
   value,
@@ -31,24 +35,32 @@ export default function SmoothTab({
   className,
   activeColorClass = "bg-brand",
 }: SmoothTabProps) {
-  const cols = Math.max(1, items.length);
-
   return (
     <div
-      role="tablist"
-      aria-label="Tabs"
       className={cn(
-        "relative mx-auto mt-4 mb-8 w-full max-w-[720px]",
-        "bg-background rounded-xl border px-1 py-1",
-        "transition-all duration-200",
+        // wrapper scroll area
+        "scrollbar-none relative mx-auto mt-4 mb-8 flex w-full justify-center overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none]",
         className,
       )}
+      role="tablist"
+      aria-label="Tabs"
     >
+      {/* hide scrollbar webkit */}
+      <style jsx>{`
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+
+      {/* rail: cuma selebar isi tabs */}
       <div
         className={cn(
-          "relative grid w-full gap-1",
-          // bagi rata dengan grid-cols-N
-          `grid-cols-${cols}` as any, // Tailwind safelist: pastikan sudah di-allow jika perlu
+          "bg-background inline-flex items-center gap-2 rounded-xl border px-2 py-2",
+          "transition-all duration-200",
+          // biar rail nggak patah ke 2 baris
+          "whitespace-nowrap",
+          // shadow halus opsional
+          "bg-background/80 supports-[backdrop-filter]:bg-background/60 backdrop-blur",
         )}
       >
         {items.map((t) => {
@@ -63,15 +75,13 @@ export default function SmoothTab({
               id={`tab-${t.id}`}
               onClick={() => onChange(t.id)}
               className={cn(
-                "relative overflow-hidden rounded-lg px-3 py-2",
-                "text-sm font-medium transition-colors duration-200",
+                "relative shrink-0 overflow-hidden rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200",
                 "focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none",
                 selected
                   ? "text-white"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
               )}
             >
-              {/* Indicator aktif menempel di dalam button -> lebar & posisi selalu konsisten */}
               {selected && (
                 <motion.div
                   layoutId="smooth-tab-indicator"
@@ -79,16 +89,22 @@ export default function SmoothTab({
                     "absolute inset-0 z-[1] rounded-lg",
                     activeColorClass,
                   )}
-                  transition={{ type: "spring", stiffness: 420, damping: 30 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 420,
+                    damping: 30,
+                  }}
                 />
               )}
 
-              {/* Label di atas indicator */}
               <span className="relative z-[2] truncate">{t.title}</span>
             </button>
           );
         })}
       </div>
+
+      {/* optional: fade kanan kecil sebagai hint bisa scroll */}
+      <div className="from-background pointer-events-none absolute top-0 right-0 h-full w-8 bg-gradient-to-l to-transparent" />
     </div>
   );
 }
