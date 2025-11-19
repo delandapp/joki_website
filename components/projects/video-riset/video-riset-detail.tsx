@@ -21,7 +21,7 @@ import FramermotionWordmark from "@/components/icons/framer-motion";
 import Postgresql from "@/components/icons/posgresql-icon";
 
 const VIDEO_RISET_DETAIL_CONFIG: ProjectDetailTemplateProps = {
-  title: "VIDEO_RISET — Video Materi Terstruktur",
+  title: "VIDEO RISET — Video Materi Terstruktur",
   subtitle: "Learning Video Platform",
   description:
     "Website pembelajaran yang mengkurasi video materi sesuai bab buku. Siswa menonton seperti YouTube Learning, lalu latihan/tryout setelahnya — cepat, terarah, dan nyaman di browser.",
@@ -88,7 +88,7 @@ const VIDEO_RISET_DETAIL_CONFIG: ProjectDetailTemplateProps = {
           "Embed resmi & YouTube Data API untuk pencarian, detail, dan statistik.",
       },
     ],
-    cardSize: { width: 460, height: 420 },
+    cardSize: { width: 430, height: 400 },
   },
 
   statsTitle: "Snapshot Proyek",
@@ -105,13 +105,13 @@ const VIDEO_RISET_DETAIL_CONFIG: ProjectDetailTemplateProps = {
       label: "Jumlah Developer",
       value: "1 Orang",
       description: "Fullstack end-to-end",
-      icon: "User",
+      icon: "Users",
     },
     {
       label: "Platform",
       value: "Web Only",
       description: "Optimasi desktop & mobile browser",
-      icon: "Monitor",
+      icon: "Globe",
     },
     {
       label: "Integrasi",

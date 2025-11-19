@@ -35,7 +35,7 @@ const Flutter = ({ size }: FlutterProps) => (
     />
     <path
       fill="url(#logosFlutter0)"
-      fill-opacity=".8"
+      fillOpacity=".8"
       d="m121.133 279.531l40.56-13.459l4.029-31.131z"
     />
   </svg>

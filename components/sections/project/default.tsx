@@ -13,6 +13,10 @@ import SuaratamaProject from "@/components/projects/suaratama/suaratama";
 import StemduProject from "@/components/projects/stemdu/stemdu";
 import EplusProject from "@/components/projects/eplus/eplus";
 import VideoRisetProject from "@/components/projects/video-riset/video_riset";
+import { TextureButton } from "@/components/ui/button-texture";
+import { ExternalLink } from "lucide-react";
+import AutomedScannerProject from "@/components/projects/automed-scanner/automed_scanner";
+import WhatsappBlastProject from "@/components/projects/whatsapp-blast/whatsapp_blast";
 
 /**
  * PROJECT SECTION + TABS (All, Website, Aplikasi, Dekstop, Other)
@@ -46,7 +50,17 @@ const projectList: ProjectItem[] = [
   { name: "Suaratama", category: "Aplikasi", Component: SuaratamaProject },
   { name: "E-Plus", category: "Dekstop", Component: EplusProject },
   { name: "Stemdu", category: "Website", Component: StemduProject },
-  { name: "Video Riset", category: "Other", Component: VideoRisetProject },
+  { name: "Video Riset", category: "Website", Component: VideoRisetProject },
+  {
+    name: "Whatsapp Blast",
+    category: "Website",
+    Component: AutomedScannerProject,
+  },
+  {
+    name: "Automed Scanner",
+    category: "Aplikasi",
+    Component: WhatsappBlastProject,
+  },
 ];
 
 /** Tabs */
@@ -152,12 +166,24 @@ export default function Project({
                 backfaceVisibility: "hidden",
                 WebkitBackfaceVisibility: "hidden",
               }}
+              className="flex flex-col items-center justify-center space-y-4 md:space-y-8 lg:space-y-12"
             >
               <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {filteredProjects.map(({ name, Component }, index) => (
                   <Component key={`${name}-${index}`} />
                 ))}
               </div>
+              <TextureButton
+                variant="primary"
+                size="lg"
+                asChild
+                className="max-w-sm"
+              >
+                <a className="flex items-center gap-2 whitespace-nowrap">
+                  <ExternalLink className="h-4 w-4" />
+                  Lihat Semua Project
+                </a>
+              </TextureButton>
             </motion.div>
           </AnimatePresence>
         </div>

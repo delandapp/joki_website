@@ -1,3 +1,4 @@
+"use client";
 import React, {
   Children,
   cloneElement,
@@ -5,7 +6,6 @@ import React, {
   isValidElement,
   ReactElement,
   ReactNode,
-  RefObject,
   useEffect,
   useMemo,
   useRef,
@@ -15,11 +15,11 @@ import gsap from "gsap";
 export interface CardSwapProps {
   width?: number | string; // ukuran CONTAINER
   height?: number | string; // ukuran CONTAINER
-  cardWidth?: number | string; // NEW: ukuran CARD
-  cardHeight?: number | string; // NEW: ukuran CARD
+  cardWidth?: number | string; // ukuran CARD
+  cardHeight?: number | string; // ukuran CARD
   cardDistance?: number;
   verticalDistance?: number;
-  delay?: number;
+  delay?: number; // ms
   pauseOnHover?: boolean;
   onCardClick?: (idx: number) => void;
   skewAmount?: number;
@@ -122,25 +122,71 @@ const CardSwap: React.FC<CardSwapProps> = ({
     () => Children.toArray(children) as ReactElement<CardProps>[],
     [children],
   );
-  const refs = useMemo<React.RefObject<HTMLDivElement>[]>(
-    () =>
-      childArr.map(
-        () =>
-          React.createRef<HTMLDivElement>() as React.RefObject<HTMLDivElement>,
-      ),
-    [childArr.length],
-  );
 
+  // Ref list (biarkan TS infer)
+  const refs = useMemo(() => {
+    return childArr.map(() => React.createRef<HTMLDivElement>());
+  }, [childArr.length]);
+
+  // Urutan index kartu
   const order = useRef<number[]>(
     Array.from({ length: childArr.length }, (_, i) => i),
   );
 
+  // ==== scheduler & state ====
   const tlRef = useRef<gsap.core.Timeline | null>(null);
-  const intervalRef = useRef<number | null>(null);
+  const delayCallRef = useRef<gsap.core.Tween | null>(null);
   const container = useRef<HTMLDivElement>(null);
+  const isAnimatingRef = useRef<boolean>(false);
+  const isHoveringRef = useRef<boolean>(false);
+
+  // Swap executor disimpan di ref agar bisa dipanggil dari scheduler
+  const runSwapRef = useRef<() => void>(() => {});
+  const callRunSwap = () => runSwapRef.current?.();
+
+  const killDelayCall = () => {
+    if (delayCallRef.current) {
+      delayCallRef.current.kill();
+      delayCallRef.current = null;
+    }
+  };
+
+  const resetTimeline = () => {
+    if (tlRef.current) {
+      tlRef.current.kill();
+      tlRef.current = null;
+    }
+    isAnimatingRef.current = false;
+  };
+
+  const scheduleNext = (ms: number) => {
+    killDelayCall();
+    const s = Math.max(0, ms) / 1000;
+    delayCallRef.current = gsap.delayedCall(s, () => {
+      if (!isHoveringRef.current) {
+        callRunSwap();
+      }
+    });
+  };
+
+  // Re-init order bila jumlah anak berubah (penting untuk mencegah stuck)
+  useEffect(() => {
+    order.current = Array.from({ length: childArr.length }, (_, i) => i);
+    // jika sudah siap dan tak sedang animasi/hover, kickstart
+    if (
+      childArr.length >= 2 &&
+      !isAnimatingRef.current &&
+      !isHoveringRef.current
+    ) {
+      scheduleNext(0); // jalankan segera
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [childArr.length]);
 
   useEffect(() => {
     const total = refs.length;
+
+    // Posisi awal
     refs.forEach((r, i) => {
       const el = r.current;
       if (!el) return;
@@ -151,20 +197,44 @@ const CardSwap: React.FC<CardSwapProps> = ({
       );
     });
 
-    if (refs.length === 0) {
-      return undefined;
+    // Jika belum ada kartu, atau kurang dari 2, jadwalkan cek ulang (supaya tidak buntu)
+    if (refs.length < 2) {
+      scheduleNext(delay);
+      return () => {
+        resetTimeline();
+        killDelayCall();
+      };
     }
 
-    const swap = () => {
-      if (order.current.length < 2) return;
+    // ===== fungsi swap (ANIMASI TETAP SAMA) =====
+    const runSwap = () => {
+      if (isAnimatingRef.current) return;
+      if (order.current.length < 2) {
+        // backup: bila sewaktu2 jadi <2, coba lagi nanti
+        scheduleNext(delay);
+        return;
+      }
 
       const [front, ...rest] = order.current;
       const elFront = refs[front].current;
-      if (!elFront) return;
+      if (!elFront) {
+        scheduleNext(delay);
+        return;
+      }
 
-      const tl = gsap.timeline();
+      isAnimatingRef.current = true;
+
+      tlRef.current?.kill();
+      const tl = gsap.timeline({
+        onComplete: () => {
+          order.current = [...rest, front];
+          isAnimatingRef.current = false;
+          scheduleNext(delay); // jadwalkan setelah selesai
+        },
+      });
       tlRef.current = tl;
 
+      // === ANIMASI ASLI (tanpa perubahan) ===
       tl.to(elFront, {
         y: "+=500",
         duration: durDrop,
@@ -215,47 +285,48 @@ const CardSwap: React.FC<CardSwapProps> = ({
         },
         "return",
       );
-
-      tl.call(() => {
-        order.current = [...rest, front];
-      });
     };
 
-    swap();
-    intervalRef.current = window.setInterval(swap, delay);
+    // expose ke scheduler
+    runSwapRef.current = runSwap;
 
-    if (pauseOnHover) {
+    // Kickstart pertama kali (langsung jalan sekali)
+    runSwap();
+
+    // Hover handling
+    if (pauseOnHover && container.current) {
       const node = container.current;
-      if (node) {
-        const pause = () => {
-          tlRef.current?.pause();
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-          }
-        };
-        const resume = () => {
-          tlRef.current?.play();
-          intervalRef.current = window.setInterval(swap, delay);
-        };
-        node.addEventListener("mouseenter", pause);
-        node.addEventListener("mouseleave", resume);
-        return () => {
-          node.removeEventListener("mouseenter", pause);
-          node.removeEventListener("mouseleave", resume);
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-          }
-        };
-      }
+
+      const onEnter = () => {
+        isHoveringRef.current = true;
+        tlRef.current?.pause();
+        killDelayCall();
+      };
+      const onLeave = () => {
+        isHoveringRef.current = false;
+        if (tlRef.current && tlRef.current.paused()) {
+          tlRef.current.play();
+        } else if (!isAnimatingRef.current) {
+          scheduleNext(delay);
+        }
+      };
+
+      node.addEventListener("mouseenter", onEnter);
+      node.addEventListener("mouseleave", onLeave);
+
+      return () => {
+        node.removeEventListener("mouseenter", onEnter);
+        node.removeEventListener("mouseleave", onLeave);
+        resetTimeline();
+        killDelayCall();
+      };
     }
+
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
+      resetTimeline();
+      killDelayCall();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     refs,
     cardDistance,
@@ -276,7 +347,6 @@ const CardSwap: React.FC<CardSwapProps> = ({
       ? cloneElement(child, {
           key: i,
           ref: refs[i],
-          // kartu pakai ukuran kartu, bukan container
           style: {
             width: cardWidth ?? width,
             height: cardHeight ?? height,
@@ -289,6 +359,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
         } as CardProps & React.RefAttributes<HTMLDivElement>)
       : child,
   );
+
   return (
     <div
       ref={container}
@@ -297,7 +368,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
         "max-[768px]:scale-[0.75] max-[480px]:scale-[0.55]",
         containerClassName ?? "",
       ].join(" ")}
-      style={{ width, height }} // ini ukuran CONTAINER, biarkan "100%"
+      style={{ width, height }}
     >
       {rendered}
     </div>

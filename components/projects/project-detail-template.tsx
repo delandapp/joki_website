@@ -563,7 +563,7 @@ function IntegrationsSection({
             {highlight && (
               <MotionInView
                 variants={blurIn}
-                className="mt-auto grid grid-cols-[auto_1fr] gap-3"
+                className="grid grid-cols-[auto_1fr] gap-3"
               >
                 <div className="flex aspect-square items-center justify-center border">
                   {highlight.icon ?? <Sparkles className="text-brand size-9" />}
@@ -762,7 +762,7 @@ function ContentGallery({ showcase }: { showcase: GalleryShowcaseConfig }) {
           cardHeight={height}
           cardDistance={10}
           verticalDistance={60}
-          delay={3200}
+          delay={1500}
           pauseOnHover
           containerClassName="w-full h-full "
         >

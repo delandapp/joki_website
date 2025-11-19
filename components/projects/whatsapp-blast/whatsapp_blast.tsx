@@ -10,13 +10,13 @@ import {
   type CardShiftProjectProps,
 } from "../card-shift-project";
 
-const TKA_PROJECT_CARD: CardShiftProjectProps = {
-  title: "Tryout TKA",
+const WHATSAPP_BLAST_PROJECT_CARD: CardShiftProjectProps = {
+  title: "Whatsapp Blast",
   description:
     "Platform terpadu untuk memonitor tugas akhir, jadwal pembimbingan, dan arsip dokumen akademik secara real-time. Dashboard dirancang agar tim kampus dan mahasiswa dapat berkolaborasi tanpa hambatan.",
   image: {
-    src: "/assets/images/projects/tka/poster.svg",
-    alt: "Pratinjau dashboard Tryout TKA",
+    src: "/assets/images/projects/wa_blast/poster.svg",
+    alt: "Pratinjau dashboard Whatsapp Blast",
   },
   icons: [
     { icon: <ReactLogo className="h-6 w-6" />, label: "React" },
@@ -53,14 +53,17 @@ const TKA_PROJECT_CARD: CardShiftProjectProps = {
     },
     {
       label: "Detail Project",
-      href: "/project/tka",
+      href: "#",
       icon: <ShieldCheck className="h-4 w-4" />,
     },
   ],
 };
 
-const TkaProject = () => (
-  <CardShiftProject {...TKA_PROJECT_CARD} className="flex justify-center" />
+const WhatsappBlastProject = () => (
+  <CardShiftProject
+    {...WHATSAPP_BLAST_PROJECT_CARD}
+    className="flex justify-center"
+  />
 );
 
-export default TkaProject;
+export default WhatsappBlastProject;

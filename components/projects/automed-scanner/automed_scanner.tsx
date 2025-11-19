@@ -11,12 +11,12 @@ import {
 } from "../card-shift-project";
 
 const AUTOMED_SCANNER_PROJECT_CARD: CardShiftProjectProps = {
-  title: "Tata Kelola Akademik",
+  title: "Automed Scanner",
   description:
     "Platform terpadu untuk memonitor tugas akhir, jadwal pembimbingan, dan arsip dokumen akademik secara real-time. Dashboard dirancang agar tim kampus dan mahasiswa dapat berkolaborasi tanpa hambatan.",
   image: {
-    src: "/assets/images/projects/tka/poster.svg",
-    alt: "Pratinjau dashboard Tata Kelola Akademik",
+    src: "/assets/images/projects/automed/poster.svg",
+    alt: "Pratinjau dashboard Automed Scanner",
   },
   icons: [
     { icon: <ReactLogo className="h-6 w-6" />, label: "React" },
@@ -59,11 +59,11 @@ const AUTOMED_SCANNER_PROJECT_CARD: CardShiftProjectProps = {
   ],
 };
 
-const TkaProject = () => (
+const AutomedScannerProject = () => (
   <CardShiftProject
     {...AUTOMED_SCANNER_PROJECT_CARD}
     className="flex justify-center"
   />
 );
 
-export default TkaProject;
+export default AutomedScannerProject;

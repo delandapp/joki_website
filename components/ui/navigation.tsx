@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import * as React from "react";
 import { ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -46,7 +47,7 @@ interface NavigationProps {
   logoDescription?: string;
   logoHref?: string;
   introItems?: IntroItem[];
-  activeHash?: string; // mis. "#layanan" | "#home"
+  activeHash?: string; // ex: "#layanan" | "#project" | "#home"
 }
 
 const getHash = (href?: string) => {
@@ -70,48 +71,52 @@ const hashOrHome = (href?: string) => {
   return h || "#home";
 };
 
+// hash untuk item non-link (ex: "Project" -> "#project")
+const titleToHash = (title: string) =>
+  `#${title.trim().toLowerCase().replace(/\s+/g, "-")}`;
+
 export default function Navigation({
   menuItems = [
     { title: "Home", isLink: true, href: siteConfig?.url ?? "/" },
     { title: "Layanan", isLink: true, href: `${siteConfig?.url}/#layanan` },
+    { title: "Project", content: "components" },
     { title: "Testimoni", isLink: true, href: `${siteConfig?.url}/#testimoni` },
     { title: "Harga", isLink: true, href: `${siteConfig?.url}/#harga` },
-    { title: "Project", content: "components" },
     { title: "Getting started", content: "default" },
   ],
   components = [
     {
-      title: "Alert Dialog",
-      href: "/docs/primitives/alert-dialog",
+      title: "Tryout TKA",
+      href: "/project/tka",
       description:
         "A modal dialog that interrupts the user with important content and expects a response.",
     },
     {
-      title: "Hover Card",
-      href: "/docs/primitives/hover-card",
+      title: "Mediatama Edu",
+      href: "/project/mediatamaedu",
       description:
         "For sighted users to preview content available behind a link.",
     },
     {
-      title: "Progress",
-      href: "/docs/primitives/progress",
+      title: "Suaratama",
+      href: "/project/suaratama",
       description:
         "Displays an indicator showing the completion progress of a task.",
     },
     {
-      title: "Scroll-area",
-      href: "/docs/primitives/scroll-area",
+      title: "E-Plus",
+      href: "/project/eplus",
       description: "Visually or semantically separates content.",
     },
     {
-      title: "Tabs",
-      href: "/docs/primitives/tabs",
+      title: "Stemdu",
+      href: "/project/stemdu",
       description:
         "Layered sections of content that are displayed one at a time.",
     },
     {
-      title: "Tooltip",
-      href: "/docs/primitives/tooltip",
+      title: "Video Riset",
+      href: "/project/riset",
       description:
         "Popup that displays information related to an element on focus/hover.",
     },
@@ -140,14 +145,29 @@ export default function Navigation({
   ],
   activeHash = "",
 }: NavigationProps) {
+  const pathname = (usePathname() || "/").toLowerCase();
+  const isProjectRoute = pathname.startsWith("/project");
+  const isOnRoot = pathname === "/";
   const normalizedActive = normalizeHash(activeHash || "#home");
-
   return (
     <NavigationMenu className="hidden md:flex" viewport={false}>
       <NavigationMenuList>
         {menuItems.map((item, index) => {
-          const currentHash = normalizeHash(hashOrHome(item.href));
-          const isActive = currentHash === normalizedActive;
+          const isProjectItem = item.title.trim().toLowerCase() === "project";
+
+          // link → hash dari href; non-link → hash dari title (ex: "Project" → "#project")
+          const derivedHash = item.isLink
+            ? normalizeHash(hashOrHome(item.href))
+            : titleToHash(item.title);
+
+          // Hanya pakai hash di halaman root
+          const isActiveByHash = isOnRoot && derivedHash === normalizedActive;
+
+          // Project aktif kalau di /project/* atau hash #project saat di root
+          // Item lain aktif hanya via hash saat di root
+          const isActive = isProjectItem
+            ? isProjectRoute || isActiveByHash
+            : isActiveByHash;
 
           return (
             <NavigationMenuItem key={index}>
@@ -155,14 +175,12 @@ export default function Navigation({
                 <NavigationMenuLink
                   className={cn(
                     navigationMenuTriggerStyle(),
-                    // Hilangkan bg pada hover/active, biar underline saja
                     "bg-transparent hover:bg-transparent focus:bg-transparent",
                     "px-2 py-2",
                   )}
                   asChild
                 >
                   <Link href={item.href ?? "/"} aria-label={item.title}>
-                    {/* Pakai group/item AGAR hover hanya berlaku untuk item ini */}
                     <span className="group/item relative inline-flex items-center">
                       <span
                         className={cn(
@@ -175,7 +193,7 @@ export default function Navigation({
                         {item.title}
                       </span>
 
-                      {/* Hover underline - HANYA untuk item ini */}
+                      {/* hover underline */}
                       <span
                         aria-hidden
                         className={cn(
@@ -184,7 +202,7 @@ export default function Navigation({
                         )}
                       />
 
-                      {/* Active underline (shared layout untuk transisi smooth antar item) */}
+                      {/* active underline (shared layout) */}
                       <AnimatePresence>
                         {isActive && (
                           <motion.span
@@ -204,11 +222,52 @@ export default function Navigation({
               ) : (
                 <>
                   <NavigationMenuTrigger
-                    className="bg-transparent"
                     aria-label={item.title}
+                    className={cn(
+                      "bg-transparent hover:bg-transparent focus:bg-transparent",
+                      "data-[state=open]:bg-transparent data-[state=open]:hover:bg-transparent data-[state=open]:focus:bg-transparent",
+                      "px-2 py-2",
+                    )}
                   >
-                    {item.title}
+                    <span className="group/item relative inline-flex items-center">
+                      <span
+                        className={cn(
+                          "text-sm font-medium transition-colors",
+                          isActive
+                            ? "text-foreground"
+                            : "text-foreground/70 group-hover/item:text-foreground group-data-[state=open]:text-foreground",
+                        )}
+                      >
+                        {item.title}
+                      </span>
+
+                      {/* hover/open underline */}
+                      <span
+                        aria-hidden
+                        className={cn(
+                          "bg-brand pointer-events-none absolute -bottom-0.5 left-0 h-0.5 w-full origin-left scale-x-0 transition-transform duration-200 ease-out",
+                          !isActive &&
+                            "group-hover/item:scale-x-100 group-data-[state=open]:scale-x-100",
+                        )}
+                      />
+
+                      {/* active underline (shared layout) */}
+                      <AnimatePresence>
+                        {isActive && (
+                          <motion.span
+                            layoutId="nav-underline"
+                            className="bg-brand pointer-events-none absolute -bottom-0.5 left-0 h-0.5 w-full rounded-full"
+                            transition={{
+                              type: "spring",
+                              stiffness: 500,
+                              damping: 40,
+                            }}
+                          />
+                        )}
+                      </AnimatePresence>
+                    </span>
                   </NavigationMenuTrigger>
+
                   <NavigationMenuContent>
                     {item.content === "default" ? (
                       <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
@@ -235,6 +294,8 @@ export default function Navigation({
                             key={i}
                             href={intro.href}
                             title={intro.title}
+                            // aktifkan berdasarkan pathname juga kalau kamu mau
+                            active={pathname === intro.href.toLowerCase()}
                           >
                             {intro.description}
                           </ListItem>
@@ -242,15 +303,21 @@ export default function Navigation({
                       </ul>
                     ) : item.content === "components" ? (
                       <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                        {components.map((component) => (
-                          <ListItem
-                            key={component.title}
-                            title={component.title}
-                            href={component.href}
-                          >
-                            {component.description}
-                          </ListItem>
-                        ))}
+                        {components.map((component) => {
+                          const isCompActive = pathname.startsWith(
+                            component.href.toLowerCase(),
+                          );
+                          return (
+                            <ListItem
+                              key={component.title}
+                              title={component.title}
+                              href={component.href}
+                              active={isCompActive}
+                            >
+                              {component.description}
+                            </ListItem>
+                          );
+                        })}
                       </ul>
                     ) : (
                       item.content
@@ -266,33 +333,76 @@ export default function Navigation({
   );
 }
 
-/** Disederhanakan agar sepenuhnya pakai Next <Link> */
+/** Item di dropdown: bg transparan + garis oranye (hover & active) */
 function ListItem({
   className,
   title,
   children,
   href,
+  active = false,
 }: {
   className?: string;
   title: string;
   href: string;
   children: React.ReactNode;
+  active?: boolean;
 }) {
   return (
-    <li>
-      <NavigationMenuLink asChild>
+    <li className="relative">
+      <NavigationMenuLink
+        asChild
+        active={active}
+        className={cn(
+          // paksa transparan di semua state & kalau active
+          "data-[active=true]:text-foreground bg-transparent hover:bg-transparent focus:bg-transparent data-[active=true]:bg-transparent",
+          // biar warna teks hover konsisten
+          "hover:text-foreground focus:text-foreground",
+          // layout dasar
+          "block rounded-md p-0",
+          className,
+        )}
+      >
         <Link
           href={href}
           data-slot="list-item"
           className={cn(
-            "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline outline-hidden transition-colors select-none",
-            className,
+            "relative block space-y-1 rounded-md p-3 leading-none no-underline outline-hidden transition-colors select-none",
+            "group/item",
           )}
         >
-          <div className="text-sm leading-none font-medium">{title}</div>
+          <div
+            className={cn(
+              "text-sm leading-none font-medium transition-colors",
+              active
+                ? "text-foreground"
+                : "text-foreground/80 group-hover/item:text-foreground",
+            )}
+          >
+            {title}
+          </div>
           <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
             {children}
           </p>
+
+          {/* hover underline */}
+          <span
+            aria-hidden
+            className={cn(
+              "bg-brand pointer-events-none absolute right-3 bottom-2 left-3 h-0.5 origin-left scale-x-0 transition-transform duration-200 ease-out",
+              !active && "group-hover/item:scale-x-100",
+            )}
+          />
+
+          {/* active underline (shared layout di dalam content) */}
+          <AnimatePresence>
+            {active && (
+              <motion.span
+                layoutId="nav-underline-content"
+                className="bg-brand pointer-events-none absolute right-3 bottom-2 left-3 h-0.5 rounded-full"
+                transition={{ type: "spring", stiffness: 500, damping: 40 }}
+              />
+            )}
+          </AnimatePresence>
         </Link>
       </NavigationMenuLink>
     </li>
